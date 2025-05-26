@@ -226,31 +226,6 @@ body.dark-mode .highlight-line {
   }
 }
 
-    .header-bar {
-  width: 100%;
-  max-width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #ffffff;
-}
-
-body.dark-mode .header-bar {
-  background-color: #212121;
-}
-
-@media (max-width: 768px) {
-  .header-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  #analog-clock {
-    align-self: flex-end;
-    transform: scale(0.85);
-  }
-    
     #analog-clock {
   position: absolute;
   top: 10px;
@@ -350,23 +325,21 @@ body.dark-mode .center-dot {
 <body>
   <div id="click-overlay">Klik di mana saja untuk memulai</div>
 
-    <div class="header-bar d-flex justify-content-between align-items-center px-3 py-2" style="position: relative; z-index: 9999;">
-    <button id="toggle-theme" class="btn btn-sm btn-light">
-      <i class="fas fa-adjust"></i>
-    </button>
+  <button id="toggle-theme" class="btn btn-sm btn-light position-absolute m-3" style="z-index: 9999; top: 0; left: 0;">
+  <i class="fas fa-adjust"></i>
+  </button>
 
-    <div id="analog-clock">
-      <div class="clock">
-        <div class="hand hour"></div>
-        <div class="hand minute"></div>
-        <div class="hand second"></div>
-        <div class="center-dot"></div>
-      </div>
-    </div>
-    </div>
+  <div id="analog-clock" class="position-absolute" style="top: 10px; right: 10px; z-index: 9999;">
+  <div class="clock">
+    <div class="hand hour"></div>
+    <div class="hand minute"></div>
+    <div class="hand second"></div>
+    <div class="center-dot"></div>
+  </div>
+</div>
 
-  <section class="form-login container pt-5 mt-5" id="main-content" style="display: none;">
-  <form class="mt-3" action="#" method="post">
+  <section class="form-login container mt-5 pt-2" id="main-content" style="display: none;">
+    <form class="mt-3" action="#" method="post">
       <div class="row justify-content-center">
         <div class="col-12 col-md-7 mb-4">
           <div class="login-row-area">
@@ -623,4 +596,4 @@ updateAnalogClock(); // panggil awal
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-  </html>
+            </html>
