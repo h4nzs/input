@@ -21,6 +21,7 @@
       height: 100%;
       font-family: 'PT Sans', sans-serif;
       background-color: #ffffff;
+      transition: background-color 0.5s ease, color 0.5s ease;
     }
 
     .login-btn {
@@ -120,6 +121,12 @@
         padding: 15px;
       }
 
+    .alert-text {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+    }
+    
       body.dark-mode {
   background-color: #212121 !important;
   color: #ffffff;
@@ -138,6 +145,10 @@ body.dark-mode .login-btn {
   color: #fff;
 }
 
+    body.dark-mode .alert-text {
+  color: #ddd;
+    }
+    
       body.dark-mode .modal-content {
   background-color: #2e2e2e;
   color: #ffffff;
@@ -158,7 +169,71 @@ body.dark-mode .modal-footer p {
 body.dark-mode .btn-close {
   filter: invert(1);
 }
-      
+
+.highlight-line {
+  display: inline-block;
+  font-size: 1.05rem;
+  font-weight: 600;
+  animation: textGlowLight 8s ease-in-out infinite, textAppear 0.8s ease forwards;
+  opacity: 0;
+  transform: scale(0.95);
+  color: #0d3769; /* Warna default untuk mode terang */
+}
+
+body.dark-mode .highlight-line {
+  color: #ffffff; /* Warna awal putih saat dark mode */
+  animation-name: textGlowDark, textAppear;
+}
+
+.delay-1 {
+  animation-delay: 0.5s, 0.5s;
+}
+.delay-2 {
+  animation-delay: 2.5s, 2.5s;
+}
+.delay-3 {
+  animation-delay: 4.5s, 4.5s;
+}
+
+/* Mode terang */
+@keyframes textGlowLight {
+  0%, 100% {
+    color: #0d3769;
+  }
+  50% {
+    color: #1e90ff;
+  }
+}
+
+/* Mode gelap */
+@keyframes textGlowDark {
+  0%, 100% {
+    color: #ffffff;
+  }
+  50% {
+    color: #11d3d6;
+  }
+}
+
+@keyframes textAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+  #logo-img {
+  max-width: 400px;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  }
+    
     }
   </style>
 </head>
@@ -176,7 +251,7 @@ body.dark-mode .btn-close {
         <div class="col-12 col-md-7 mb-4">
           <div class="login-row-area">
             <div class="login-opening text-center mb-3">
-              <img class="img-fluid" src="assets/logo.png" alt="RuangData">
+              <img id="logo-img" class="img-fluid" src="assets/logo.png" alt="RuangData">
             </div>
             <div class="mb-3">
               <p class="login-form-title text-center">MASUKAN NOMOR :</p>
@@ -207,7 +282,11 @@ body.dark-mode .btn-close {
         </div>
 
         <div class="col-12 mt-4">
-          <p class="alert-text text-center">- CEK KEMBALI NOMOR ANDA -</p>
+          <div class="highlight-wrapper text-center mt-4 px-2">
+  <p class="highlight-line delay-1">Cek kembali nomor tujuan Anda dan pastikan nomor sudah dilanjutkan.</p>
+  <p class="highlight-line delay-2">Kami tidak bertanggung jawab atas kesalahan input nomor oleh customer.</p>
+  <p class="highlight-line delay-3">Terima kasih, semoga harimu menyenangkan.</p>
+</div>
         </div>
         
     </form>
@@ -270,12 +349,40 @@ body.dark-mode .btn-close {
         if (elem.requestFullscreen) {
           elem.requestFullscreen();
         }
+        requestWakeLock();
         $('#click-overlay').fadeOut();
         $('#main-content').fadeIn();
       });
 
+      let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => {
+      console.log('Wake Lock was released');
+    });
+    console.log('Wake Lock is active');
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    requestWakeLock();
+  }
+});
+    
       $('#toggle-theme').click(function () {
   $('body').toggleClass('dark-mode');
+
+        const logo = $('#logo-img');
+  if ($('body').hasClass('dark-mode')) {
+    logo.attr('src', 'assets/logo-dark.png');
+  } else {
+    logo.attr('src', 'assets/logo.png');
+  }
 });
 
       $('.button[data-number]').click(function () {
@@ -350,6 +457,28 @@ body.dark-mode .btn-close {
     warnSound.play();
   }
 });
+
+      // Otomatis ubah mode berdasarkan waktu
+function applyAutoTheme() {
+  const now = new Date();
+  const hours = now.getHours();
+  const logo = $('#logo-img');
+
+  if (hours >= 17 || hours < 7) {
+    $('body').addClass('dark-mode');
+    logo.attr('src', 'assets/logo-dark.png');
+  } else {
+    $('body').removeClass('dark-mode');
+    logo.attr('src', 'assets/logo.png');
+  }
+}
+
+// Jalankan saat dokumen siap
+applyAutoTheme();
+
+// Periksa setiap 5 menit untuk memastikan perubahan otomatis
+setInterval(applyAutoTheme, 5 * 60 * 1000);
+    
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
