@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,7 +13,7 @@
   <audio id="click-sound" src="assets/sounds/click.mp3" preload="auto"></audio>
   <audio id="success-sound" src="assets/sounds/sukses.mp3" preload="auto"></audio>
   <audio id="warn-sound" src="assets/sounds/warn.mp3" preload="auto"></audio>
-
+  
   <style>
     html, body {
       margin: 0;
@@ -23,88 +24,304 @@
       transition: background-color 0.5s ease, color 0.5s ease;
     }
 
-    #analog-clock {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .login-btn {
+  background-color: #0d3769;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:active {
+  transform: scale(0.95);
+}
+    
+    #click-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
       z-index: 9999;
-      cursor: move;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      cursor: pointer;
     }
 
-    .clock {
-      width: 50px;
-      height: 50px;
-      border: 3px solid #333;
-      border-radius: 50%;
-      position: relative;
-      background-color: #fff;
+    .calculator {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .hand {
-      position: absolute;
-      bottom: 50%;
-      left: 50%;
-      transform-origin: bottom;
-      transform: translateX(-50%) rotate(0deg);
-      border-radius: 2px;
+    .calculator .button,
+    .calculator .button-x {
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 20px;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      text-decoration: none;
     }
 
-    .hand.hour {
-      width: 3px;
-      height: 14px;
-      background-color: #333;
+    .calculator .button {
+      background-color: #0d3769;
     }
 
-    .hand.minute {
-      width: 2px;
-      height: 20px;
-      background-color: #555;
+    
+    .calculator .button.animate-click {
+  transform: scale(0.92);
+  transition: transform 0.1s ease;
+    }
+    
+
+    .calculator .button-x {
+      background-color: #c64543;
     }
 
-    .hand.second {
-      width: 1.5px;
-      height: 24px;
-      background-color: #e74c3c;
+  .calculator .button.clicked-temp {
+  background-color: #e67817 !important;
+}
+
+    .login-row-area {
+      border: 1px solid #00000044;
+      border-radius: 15px;
+      padding: 30px;
+      animation: fadeInUp 0.6s ease-in-out;
     }
 
-    .center-dot {
-      width: 6px;
-      height: 6px;
-      background-color: #333;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
     }
 
-    /* Dark mode */
-    body.dark-mode .clock {
-      border-color: #fff;
-      background-color: #2e2e2e;
-    }
-    body.dark-mode .hand.hour,
-    body.dark-mode .hand.minute,
-    body.dark-mode .center-dot {
-      background-color: #fff;
+    .alert {
+      font-size: 1.2rem;
+      text-align: center;
+      border-radius: 10px;
     }
 
-    @media (max-width: 768px) {
-      #analog-clock {
-        top: 5px;
-        right: 5px;
-        transform: scale(0.8);
+    .modal-content {
+      border-radius: 15px;
+    }
+
+      .login-row-area {
+        padding: 15px;
       }
 
-      .clock {
-        width: 40px;
-        height: 40px;
-        border-width: 2px;
-      }
+    .alert-text {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+    }
+    
+      body.dark-mode {
+  background-color: #212121 !important;
+  color: #ffffff;
+}
 
-      .hand.hour { height: 12px; }
-      .hand.minute { height: 16px; }
-      .hand.second { height: 20px; }
+body.dark-mode .calculator {
+  background-color: #2e2e2e;
+}
+
+body.dark-mode .button {
+  background-color: #11b1bd !important;
+}
+
+body.dark-mode .login-btn {
+  background-color: #11b1bd !important;
+  color: #fff;
+}
+
+    body.dark-mode .alert-text {
+  color: #ddd;
+    }
+    
+      body.dark-mode .modal-content {
+  background-color: #2e2e2e;
+  color: #ffffff;
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  background-color: #2e2e2e;
+  color: #ffffff;
+}
+
+body.dark-mode .modal-title,
+body.dark-mode .modal-body p,
+body.dark-mode .modal-footer p {
+  color: #ffffff;
+}
+
+body.dark-mode .btn-close {
+  filter: invert(1);
+}
+
+.highlight-line {
+  display: inline-block;
+  font-size: 1.05rem;
+  font-weight: 600;
+  animation: textGlowLight 8s ease-in-out infinite, textAppear 0.8s ease forwards;
+  opacity: 0;
+  transform: scale(0.95);
+  color: #0d3769; /* Warna default untuk mode terang */
+}
+
+body.dark-mode .highlight-line {
+  color: #ffffff; /* Warna awal putih saat dark mode */
+  animation-name: textGlowDark, textAppear;
+}
+
+.delay-1 {
+  animation-delay: 0.5s, 0.5s;
+}
+.delay-2 {
+  animation-delay: 2.5s, 2.5s;
+}
+.delay-3 {
+  animation-delay: 4.5s, 4.5s;
+}
+
+/* Mode terang */
+@keyframes textGlowLight {
+  0%, 100% {
+    color: #0d3769;
+  }
+  50% {
+    color: #1e90ff;
+  }
+}
+
+/* Mode gelap */
+@keyframes textGlowDark {
+  0%, 100% {
+    color: #ffffff;
+  }
+  50% {
+    color: #11d3d6;
+  }
+}
+
+@keyframes textAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+    #analog-clock {
+  cursor: move;
+    }
+    
+    #analog-clock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 9999;
+}
+
+.clock {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #333;
+  border-radius: 50%;
+  position: relative;
+  background-color: #fff;
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  transform: translateX(-50%) rotate(0deg);
+  border-radius: 2px;
+}
+
+.hand.hour {
+  width: 3px;
+  height: 14px;
+  background-color: #333;
+}
+
+.hand.minute {
+  width: 2px;
+  height: 20px;
+  background-color: #555;
+}
+
+.hand.second {
+  width: 1.5px;
+  height: 24px;
+  background-color: #e74c3c;
+}
+
+.center-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #333;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Mode Gelap */
+body.dark-mode .clock {
+  border-color: #fff;
+  background-color: #2e2e2e;
+}
+body.dark-mode .hand.hour,
+body.dark-mode .hand.minute,
+body.dark-mode .center-dot {
+  background-color: #fff;
+}
+
+/* Responsive untuk layar kecil atau mode landscape */
+@media (max-width: 768px) {
+  #analog-clock {
+    top: 5px;
+    right: 5px;
+    transform: scale(0.8);
+  }
+
+  .clock {
+    width: 40px;
+    height: 40px;
+    border-width: 2px;
+  }
+
+  .hand.hour { height: 12px; }
+  .hand.minute { height: 16px; }
+  .hand.second { height: 20px; }
+}
+    
+  #logo-img {
+  max-width: 400px;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  }
+
     }
   </style>
 </head>
@@ -112,20 +329,18 @@
 <body>
   <div id="click-overlay">Klik di mana saja untuk memulai</div>
 
-  <!-- Tombol tema -->
   <button id="toggle-theme" class="btn btn-sm btn-light position-absolute m-3" style="z-index: 9999; top: 0; left: 0;">
-    <i class="fas fa-adjust"></i>
+  <i class="fas fa-adjust"></i>
   </button>
 
-  <!-- Jam analog -->
-  <div id="analog-clock">
-    <div class="clock">
-      <div class="hand hour"></div>
-      <div class="hand minute"></div>
-      <div class="hand second"></div>
-      <div class="center-dot"></div>
-    </div>
+  <div id="analog-clock" class="position-absolute" style="top: 10px; left: 10px; z-index: 9999;">
+  <div class="clock">
+    <div class="hand hour"></div>
+    <div class="hand minute"></div>
+    <div class="hand second"></div>
+    <div class="center-dot"></div>
   </div>
+</div>
 
   <section class="form-login container mt-5 pt-2" id="main-content" style="display: none;">
     <form class="mt-3" action="#" method="post">
@@ -211,97 +426,210 @@
   </div>
 </div>
   
+  <!-- Scripts -->
   <script>
     $(document).ready(function () {
+      let currentInput = '';
+
+      function formatPhoneNumber(phone) {
+        let value = phone.replace(/\D/g, '');
+        if (value.length > 4 && value.length <= 8) {
+          return value.replace(/(\d{4})(\d+)/, '$1-$2');
+        } else if (value.length > 8) {
+          return value.replace(/(\d{4})(\d{4})(\d+)/, '$1-$2-$3');
+        }
+        return value;
+      }
+
       $('#click-overlay').on('click', function () {
-        document.body.requestFullscreen?.();
+        const elem = document.body;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        }
+        requestWakeLock();
         $('#click-overlay').fadeOut();
         $('#main-content').fadeIn();
-        requestWakeLock();
+        // Fungsi drag analog clock
+let isDragging = false;
+let offset = { x: 0, y: 0 };
 
-        // Inisialisasi drag untuk analog-clock
-        let isDragging = false;
-        let offset = { x: 0, y: 0 };
-        const $clock = $('#analog-clock');
+const $clock = $('#analog-clock');
 
-        $clock.on('mousedown touchstart', function (e) {
-          isDragging = true;
-          const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-          const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
-          const rect = $clock[0].getBoundingClientRect();
-          offset.x = clientX - rect.left;
-          offset.y = clientY - rect.top;
-          e.preventDefault();
-        });
+$clock.on('mousedown touchstart', function(e) {
+  isDragging = true;
+  const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+  const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+  const rect = $clock[0].getBoundingClientRect();
+  offset.x = clientX - rect.left;
+  offset.y = clientY - rect.top;
+  e.preventDefault();
+});
 
-        $(document).on('mousemove touchmove', function (e) {
-          if (isDragging) {
-            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-            $clock.css({
-              top: clientY - offset.y + 'px',
-              left: clientX - offset.x + 'px',
-              right: 'auto'
-            });
-          }
-        });
-
-        $(document).on('mouseup touchend', function () {
-          isDragging = false;
-        });
-      });
-
-      // Wake Lock
-      let wakeLock = null;
-      async function requestWakeLock() {
-        try {
-          wakeLock = await navigator.wakeLock.request('screen');
-          wakeLock.addEventListener('release', () => console.log('Wake Lock released'));
-          console.log('Wake Lock active');
-        } catch (err) {
-          console.error(`${err.name}, ${err.message}`);
-        }
-      }
-
-      document.addEventListener('visibilitychange', () => {
-        if (wakeLock !== null && document.visibilityState === 'visible') {
-          requestWakeLock();
-        }
-      });
-
-      // Auto dark mode
-      function applyAutoTheme() {
-        const hour = new Date().getHours();
-        if (hour >= 17 || hour < 7) {
-          $('body').addClass('dark-mode');
-        } else {
-          $('body').removeClass('dark-mode');
-        }
-      }
-
-      applyAutoTheme();
-      setInterval(applyAutoTheme, 5 * 60 * 1000);
-
-      // Theme toggle
-      $('#toggle-theme').click(() => $('body').toggleClass('dark-mode'));
-
-      // Analog clock update
-      function updateAnalogClock() {
-        const now = new Date();
-        const sec = now.getSeconds();
-        const min = now.getMinutes();
-        const hour = now.getHours();
-
-        $('.hand.second').css('transform', `translateX(-50%) rotate(${sec * 6}deg)`);
-        $('.hand.minute').css('transform', `translateX(-50%) rotate(${min * 6 + sec * 0.1}deg)`);
-        $('.hand.hour').css('transform', `translateX(-50%) rotate(${(hour % 12) * 30 + min * 0.5}deg)`);
-      }
-
-      setInterval(updateAnalogClock, 1000);
-      updateAnalogClock();
+$(document).on('mousemove touchmove', function(e) {
+  if (isDragging) {
+    const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+    $clock.css({
+      top: clientY - offset.y + 'px',
+      left: clientX - offset.x + 'px',
+      right: 'auto' // reset right agar posisi kiri aktif
     });
-  </script>
+  }
+});
 
+$(document).on('mouseup touchend', function() {
+  isDragging = false;
+});
+          
+      });
+
+      let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => {
+      console.log('Wake Lock was released');
+    });
+    console.log('Wake Lock is active');
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    requestWakeLock();
+  }
+});
+    
+      $('#toggle-theme').click(function () {
+  $('body').toggleClass('dark-mode');
+
+        const logo = $('#logo-img');
+  if ($('body').hasClass('dark-mode')) {
+    logo.attr('src', 'assets/logo-dark.png');
+  } else {
+    logo.attr('src', 'assets/logo.png');
+  }
+});
+
+      $('.button[data-number]').click(function () {
+        const $this = $(this);
+        const number = $(this).data('number');
+        currentInput += number;
+        $('#formatted-phone').val(formatPhoneNumber(currentInput));
+        $('#raw-phone').val(currentInput);
+        const clickSound = document.getElementById('click-sound');
+        if (clickSound) {
+        clickSound.volume = 1.0;
+        clickSound.currentTime = 0; // restart sound
+        clickSound.play();
+      }
+        $this.addClass('animate-click clicked-temp');
+  setTimeout(() => {
+    $this.removeClass('animate-click clicked-temp');
+  }, 200);
+        if (navigator.vibrate) navigator.vibrate(100);
+      });
+
+      $('#delete').click(function () {
+        currentInput = currentInput.slice(0, -1);
+        $('#formatted-phone').val(formatPhoneNumber(currentInput));
+        $('#raw-phone').val(currentInput);
+      });
+
+      $('#clear').click(function () {
+        currentInput = '';
+        $('#formatted-phone').val('');
+        $('#raw-phone').val('');
+      });
+
+      $('form').on('submit', function (event) {
+        event.preventDefault();
+        const nomor = $('#raw-phone').val();
+        if (!nomor) {
+        $('#warningModal').modal('show');
+          setTimeout(() => {
+  $('#warningModal').modal('hide');
+}, 5000);
+        return;
+    }
+
+
+        currentInput = '';
+        $('#formatted-phone').val('');
+        $('#raw-phone').val('');
+
+        navigator.clipboard.writeText(nomor).then(function () {
+          console.log("Nomor berhasil disalin ke clipboard!");
+        });
+
+        $('#successModal').modal('show');
+        setTimeout(() => {
+        $('#successModal').modal('hide');
+},      10000);
+      });
+      $('#successModal').on('shown.bs.modal', function () {
+  const successSound = document.getElementById('success-sound');
+  if (successSound) {
+    successSound.volume = 1.0;
+    successSound.currentTime = 0;
+    successSound.play();
+  }
+});
+      $('#warningModal').on('shown.bs.modal', function () {
+  const warnSound = document.getElementById('warn-sound');
+  if (warnSound) {
+    warnSound.volume = 1.0;
+    warnSound.currentTime = 0;
+    warnSound.play();
+  }
+});
+
+      // Otomatis ubah mode berdasarkan waktu
+function applyAutoTheme() {
+  const now = new Date();
+  const hours = now.getHours();
+  const logo = $('#logo-img');
+
+  if (hours >= 17 || hours < 7) {
+    $('body').addClass('dark-mode');
+    logo.attr('src', 'assets/logo-dark.png');
+  } else {
+    $('body').removeClass('dark-mode');
+    logo.attr('src', 'assets/logo.png');
+  }
+}
+
+// Jalankan saat dokumen siap
+applyAutoTheme();
+
+// Periksa setiap 5 menit untuk memastikan perubahan otomatis
+setInterval(applyAutoTheme, 5 * 60 * 1000);
+    
+    });
+
+  function updateAnalogClock() {
+  const now = new Date();
+  const seconds = now.getSeconds();
+  const minutes = now.getMinutes();
+  const hours = now.getHours();
+
+  const secondDeg = seconds * 6; // 360/60
+  const minuteDeg = minutes * 6 + seconds * 0.1; // 360/60 + per detik
+  const hourDeg = (hours % 12) * 30 + minutes * 0.5; // 360/12 + per menit
+
+  document.querySelector('.hand.second').style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+  document.querySelector('.hand.minute').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+  document.querySelector('.hand.hour').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+}
+
+setInterval(updateAnalogClock, 1000);
+updateAnalogClock(); // panggil awal
+                   
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+
+    </html>
