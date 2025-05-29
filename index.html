@@ -227,6 +227,10 @@ body.dark-mode .highlight-line {
 }
 
     #analog-clock {
+  cursor: move;
+    }
+    
+    #analog-clock {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -329,7 +333,7 @@ body.dark-mode .center-dot {
   <i class="fas fa-adjust"></i>
   </button>
 
-  <div id="analog-clock" class="position-absolute" style="top: 10px; right: 10px; z-index: 9999;">
+  <div id="analog-clock" class="position-absolute" style="top: 10px; left: 10px; z-index: 9999;">
   <div class="clock">
     <div class="hand hour"></div>
     <div class="hand minute"></div>
@@ -445,6 +449,38 @@ body.dark-mode .center-dot {
         requestWakeLock();
         $('#click-overlay').fadeOut();
         $('#main-content').fadeIn();
+        // Fungsi drag analog clock
+let isDragging = false;
+let offset = { x: 0, y: 0 };
+
+const $clock = $('#analog-clock');
+
+$clock.on('mousedown touchstart', function(e) {
+  isDragging = true;
+  const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+  const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+  const rect = $clock[0].getBoundingClientRect();
+  offset.x = clientX - rect.left;
+  offset.y = clientY - rect.top;
+  e.preventDefault();
+});
+
+$(document).on('mousemove touchmove', function(e) {
+  if (isDragging) {
+    const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+    $clock.css({
+      top: clientY - offset.y + 'px',
+      left: clientX - offset.x + 'px',
+      right: 'auto' // reset right agar posisi kiri aktif
+    });
+  }
+});
+
+$(document).on('mouseup touchend', function() {
+  isDragging = false;
+});
+          
       });
 
       let wakeLock = null;
