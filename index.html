@@ -313,6 +313,18 @@ body.dark-mode .center-dot {
   .hand.minute { height: 16px; }
   .hand.second { height: 20px; }
 }
+
+    #analog-clock:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#analog-clock.dragging {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
     
   #logo-img {
   max-width: 400px;
@@ -333,7 +345,7 @@ body.dark-mode .center-dot {
   <i class="fas fa-adjust"></i>
   </button>
 
-  <div id="analog-clock" class="position-absolute" style="top: 10px; left: 10px; z-index: 9999;">
+  <div id="analog-clock" class="position-absolute" style="top: 10px; right: 10px; z-index: 9999;">
   <div class="clock">
     <div class="hand hour"></div>
     <div class="hand minute"></div>
@@ -463,6 +475,7 @@ $clock.on('mousedown touchstart', function(e) {
   offset.x = clientX - rect.left;
   offset.y = clientY - rect.top;
   e.preventDefault();
+  $clock.addClass('dragging');
 });
 
 $(document).on('mousemove touchmove', function(e) {
@@ -479,6 +492,7 @@ $(document).on('mousemove touchmove', function(e) {
 
 $(document).on('mouseup touchend', function() {
   isDragging = false;
+  $clock.removeClass('dragging');
 });
           
       });
