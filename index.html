@@ -429,20 +429,28 @@ body.dark-mode .highlight-line {
       }
 
       $('#click-overlay').on('click', function () {
-  $('#loading-screen').fadeIn(); // Tampilkan spinner
   const elem = document.body;
 
+  // Minta fullscreen hanya saat user klik
   if (elem.requestFullscreen) {
-    elem.requestFullscreen();
+    elem.requestFullscreen().catch(err => {
+      console.warn("Gagal masuk fullscreen:", err);
+    });
   }
 
   requestWakeLock();
 
+  // Tampilkan loading screen selama 1 detik
+  $('#loading-screen').fadeIn();
+
   setTimeout(() => {
     $('#click-overlay').fadeOut();
     $('#main-content').fadeIn();
-    $('#loading-screen').fadeOut(); // Sembunyikan spinner
-  }, 1000); // Simulasi loading 1 detik
+    $('#loading-screen').fadeOut();
+
+    // Simpan status ke localStorage agar tidak diulang setelah reload
+    localStorage.setItem('isStarted', 'true');
+  }, 1000);
 });
 
       let wakeLock = null;
