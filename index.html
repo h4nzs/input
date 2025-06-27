@@ -19,7 +19,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: 'PT Sans', sans-serif;
+      font-family: 'PT Sans', Arial, sans-serif;
       background-color: #ffffff;
       transition: background-color 0.5s ease, color 0.5s ease;
     }
@@ -167,7 +167,7 @@ body.dark-mode .modal-footer p {
 }
 
     #warningModal,
-    #existNodal,
+    #existsModal,
   #successModal {
     z-index: 1060;
   }
@@ -179,6 +179,17 @@ body.dark-mode .modal-footer p {
   .modal-backdrop {
     z-index: 1040 !important;
   }
+
+    .spinner-border {
+  animation: spinner-border 0.75s linear infinite;
+}
+
+#loading-screen,
+#history-loading {
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(2px);
+}
+    
 body.dark-mode .btn-close {
   filter: invert(1);
 }
@@ -366,6 +377,12 @@ body.dark-mode .highlight-line {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
       <div class="modal-body">
+        <div id="history-loading" class="text-center my-3 d-none">
+  <div class="spinner-border text-secondary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <p class="mt-2">Memuat riwayat...</p>
+        </div>
         <ul id="history-list" class="list-group">
         </ul>
         <button id="load-more-btn" class="btn btn-outline-primary w-100 d-none">Muat Lebih Banyak</button>
@@ -412,14 +429,21 @@ body.dark-mode .highlight-line {
       }
 
       $('#click-overlay').on('click', function () {
-        const elem = document.body;
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        }
-        requestWakeLock();
-        $('#click-overlay').fadeOut();
-        $('#main-content').fadeIn();
-      });
+  $('#loading-screen').fadeIn(); // Tampilkan spinner
+  const elem = document.body;
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  }
+
+  requestWakeLock();
+
+  setTimeout(() => {
+    $('#click-overlay').fadeOut();
+    $('#main-content').fadeIn();
+    $('#loading-screen').fadeOut(); // Sembunyikan spinner
+  }, 1000); // Simulasi loading 1 detik
+});
 
       let wakeLock = null;
 
@@ -501,27 +525,34 @@ $('#view-history-btn').on('click', function () {
 // Fungsi render sebagian data
 function renderBatch() {
   const list = $('#history-list');
-  const batch = fullHistory.slice(currentIndex, currentIndex + batchSize);
+  const loader = $('#history-loading');
 
-  batch.forEach(nomor => {
-    list.append(`
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span class="history-number">${nomor}</span>
-        <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}">
-          <i class="fas fa-copy"></i>
-        </button>
-      </li>
-    `);
-  });
+  loader.removeClass('d-none'); // Tampilkan loading
 
-  currentIndex += batch.length;
+  setTimeout(() => { // Simulasi loading untuk pengalaman UX yang lebih smooth
+    const batch = fullHistory.slice(currentIndex, currentIndex + batchSize);
 
-  // Tampilkan tombol "Muat Lebih Banyak" jika masih ada sisa
-  if (currentIndex < fullHistory.length) {
-    $('#load-more-btn').removeClass('d-none');
-  } else {
-    $('#load-more-btn').addClass('d-none');
-  }
+    batch.forEach(nomor => {
+      list.append(`
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span class="history-number">${nomor}</span>
+          <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}">
+            <i class="fas fa-copy"></i>
+          </button>
+        </li>
+      `);
+    });
+
+    currentIndex += batch.length;
+
+    if (currentIndex < fullHistory.length) {
+      $('#load-more-btn').removeClass('d-none');
+    } else {
+      $('#load-more-btn').addClass('d-none');
+    }
+
+    loader.addClass('d-none'); // Sembunyikan loading
+  }, 500); // Delay simulasi
 }
 
 // Event untuk tombol "Muat Lebih Banyak"
@@ -538,7 +569,8 @@ $(document).on('click', '.copy-btn', function () {
 
   navigator.clipboard.writeText(nomor).then(() => {
     // Ganti ikon jadi centang
-    $icon.removeClass('fa-copy').addClass('fa-check');
+    $icon.attr('class', 'fas fa-check');
+    
 
     // Tampilkan modal sukses
     $('#successModal .modal-title').text('Nomor Disalin');
@@ -668,6 +700,12 @@ setInterval(applyAutoTheme, 5 * 60 * 1000);
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <div id="loading-screen" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-white" style="z-index: 99998; display: none;">
+  <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  </div>
+  
 </body>
 
-  </html>
+        </html>
