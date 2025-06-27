@@ -355,6 +355,7 @@ body.dark-mode .highlight-line {
       </div>
       <div class="modal-body">
         <ul id="history-list" class="list-group">
+          <button id="load-more-btn" class="btn btn-outline-primary w-100 d-none">Muat Lebih Banyak</button>
         <li class="list-group-item d-flex justify-content-between align-items-center">
   <span class="history-number">${nomor}</span>
   <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}"><i class="fas fa-copy"></i></button>
@@ -477,28 +478,49 @@ document.addEventListener('visibilitychange', () => {
         }
       });
 
-      $('#view-history-btn').on('click', function () {
-  const history = JSON.parse(localStorage.getItem('nomorRiwayat')) || [];
-  const list = $('#history-list');
-  list.empty();
+      let fullHistory = []; // Data asli
+let batchSize = 20; // Tampilkan 20 nomor per kali
+let currentIndex = 0;
 
-  if (history.length === 0) {
-    list.append('<li class="list-group-item text-muted">Belum ada nomor tersimpan.</li>');
-  } else {
-    history.slice().reverse().forEach(nomor => {
-      list.append(`
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span class="history-number">${nomor}</span>
-          <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}">
-            <i class="fas fa-copy"></i>
-          </button>
-        </li>
-      `);
-    });
-  }
-
+$('#view-history-btn').on('click', function () {
+  fullHistory = JSON.parse(localStorage.getItem('nomorRiwayat')) || [];
+  currentIndex = 0;
+  $('#history-list').empty();
+  renderBatch(); // Tampilkan batch pertama
   $('#historyModal').modal('show');
 });
+
+// Fungsi render sebagian data
+function renderBatch() {
+  const list = $('#history-list');
+  const batch = fullHistory.slice(currentIndex, currentIndex + batchSize);
+
+  batch.forEach(nomor => {
+    list.append(`
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span class="history-number">${nomor}</span>
+        <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}">
+          <i class="fas fa-copy"></i>
+        </button>
+      </li>
+    `);
+  });
+
+  currentIndex += batch.length;
+
+  // Tampilkan tombol "Muat Lebih Banyak" jika masih ada sisa
+  if (currentIndex < fullHistory.length) {
+    $('#load-more-btn').removeClass('d-none');
+  } else {
+    $('#load-more-btn').addClass('d-none');
+  }
+}
+
+// Event untuk tombol "Muat Lebih Banyak"
+$('#load-more-btn').on('click', function () {
+  renderBatch();
+});
+                  
 
 // Copy dari daftar riwayat dan tampilkan sukses
 $(document).on('click', '.copy-btn', function () {
