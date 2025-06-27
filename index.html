@@ -246,7 +246,6 @@ body.dark-mode .highlight-line {
   margin-right: auto;
   }
     
-    }
   </style>
 </head>
 
@@ -355,10 +354,7 @@ body.dark-mode .highlight-line {
       </div>
       <div class="modal-body">
         <ul id="history-list" class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-      <span class="history-number">${nomor}</span>
       <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}"><i class="fas fa-copy"></i></button>
-        </li>
         </ul>
         <button id="load-more-btn" class="btn btn-outline-primary w-100 d-none">Muat Lebih Banyak</button>
       </div>
@@ -525,7 +521,14 @@ $('#load-more-btn').on('click', function () {
 // Copy dari daftar riwayat dan tampilkan sukses
 $(document).on('click', '.copy-btn', function () {
   const nomor = $(this).data('number');
+  const $btn = $(this);
+  const $icon = $btn.find('i');
+
   navigator.clipboard.writeText(nomor).then(() => {
+    // Ganti ikon jadi centang
+    $icon.removeClass('fa-copy').addClass('fa-check');
+
+    // Tampilkan modal sukses
     $('#successModal .modal-title').text('Nomor Disalin');
     $('#successModal .modal-body p').text(`Nomor ${nomor} berhasil disalin!`);
     $('#successModal').modal('show');
@@ -537,6 +540,11 @@ $(document).on('click', '.copy-btn', function () {
       successSound.currentTime = 0;
       successSound.play();
     }
+
+    // Kembalikan ikon ke copy setelah 2 detik
+    setTimeout(() => {
+      $icon.removeClass('fa-check').addClass('fa-copy');
+    }, 2000);
   });
 });
                       
