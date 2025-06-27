@@ -226,6 +226,18 @@ body.dark-mode .highlight-line {
   }
 }
 
+    .history-number {
+  font-weight: 600;
+}
+.copy-btn.btn-outline-primary {
+  background-color: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+}
+.copy-btn.btn-outline-primary:hover {
+  background-color: #0b5ed7;
+}
+
   #logo-img {
   max-width: 400px;
   height: auto;
@@ -342,7 +354,12 @@ body.dark-mode .highlight-line {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
       <div class="modal-body">
-        <ul id="history-list" class="list-group list-group-flush"></ul>
+        <ul id="history-list" class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+  <span class="history-number">${nomor}</span>
+  <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}"><i class="fas fa-copy"></i></button>
+</li>
+        </ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -350,6 +367,24 @@ body.dark-mode .highlight-line {
       </div>
     </div>
   </div>
+  </div>
+
+  <div class="modal fade" id="existsModal" tabindex="-1" aria-labelledby="existsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content text-center">
+        <div class="modal-header bg-warning-subtle">
+          <h5 class="modal-title text-danger">Nomor Sudah Tersimpan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 100px;">
+          <p class="text-secondary">Nomor tersebut sudah ada di riwayat.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
   </div>
   
   <!-- Scripts -->
@@ -397,32 +432,50 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-      function saveToHistory(number) {
-  let history = JSON.parse(localStorage.getItem('nomorRiwayat')) || [];
-  if (!history.includes(number)) {
-    history.push(number);
-    localStorage.setItem('nomorRiwayat', JSON.stringify(history));
-  }
-}
+          function saveToHistory(number) {
+        let history = JSON.parse(localStorage.getItem('nomorRiwayat')) || [];
+        if (history.includes(number)) {
+          return false; // Sudah ada
+        } else {
+          history.push(number);
+          localStorage.setItem('nomorRiwayat', JSON.stringify(history));
+          return true; // Baru ditambahkan
+        }
+      }
 
-$('#save-and-continue').on('click', function () {
-  const nomor = $('#raw-phone').val();
-  if (!nomor) {
-    $('#warningModal').modal('show');
-    setTimeout(() => $('#warningModal').modal('hide'), 5000);
-    return;
-  }
+      $('#save-and-continue').on('click', function () {
+        const nomor = $('#raw-phone').val();
+        if (!nomor) {
+          $('#warningModal').modal('show');
+          setTimeout(() => $('#warningModal').modal('hide'), 5000);
+          return;
+        }
 
-  saveToHistory(nomor);
-  $('#successModal').modal('show');
-  setTimeout(() => $('#successModal').modal('hide'), 10000);
-  
-  navigator.clipboard.writeText(nomor);
+        const saved = saveToHistory(nomor);
+        if (saved) {
+          $('#successModal .modal-title').text('Nomor Berhasil Disimpan');
+          $('#successModal .modal-body p').text('Nomor berhasil disimpan!');
+          $('#successModal').modal('show');
+          setTimeout(() => $('#successModal').modal('hide'), 10000);
+          navigator.clipboard.writeText(nomor);
+        } else {
+          $('#existsModal').modal('show');
+          setTimeout(() => $('#existsModal').modal('hide'), 7000);
+        }
 
-  currentInput = '';
-  $('#formatted-phone').val('');
-  $('#raw-phone').val('');
-});
+        currentInput = '';
+        $('#formatted-phone').val('');
+        $('#raw-phone').val('');
+      });
+
+      $('#existsModal').on('shown.bs.modal', function () {
+        const warnSound = document.getElementById('warn-sound');
+        if (warnSound) {
+          warnSound.volume = 1.0;
+          warnSound.currentTime = 0;
+          warnSound.play();
+        }
+      });
 
       $('#view-history-btn').on('click', function () {
   const history = JSON.parse(localStorage.getItem('nomorRiwayat')) || [];
@@ -432,12 +485,37 @@ $('#save-and-continue').on('click', function () {
   if (history.length === 0) {
     list.append('<li class="list-group-item text-muted">Belum ada nomor tersimpan.</li>');
   } else {
-    history.reverse().forEach(nomor => {
-      list.append(`<li class="list-group-item">${nomor}</li>`);
+    history.slice().reverse().forEach(nomor => {
+      list.append(`
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span class="history-number">${nomor}</span>
+          <button class="btn btn-sm btn-outline-primary copy-btn" data-number="${nomor}">
+            <i class="fas fa-copy"></i>
+          </button>
+        </li>
+      `);
     });
   }
 
   $('#historyModal').modal('show');
+});
+
+// Copy dari daftar riwayat dan tampilkan sukses
+$(document).on('click', '.copy-btn', function () {
+  const nomor = $(this).data('number');
+  navigator.clipboard.writeText(nomor).then(() => {
+    $('#successModal .modal-title').text('Nomor Disalin');
+    $('#successModal .modal-body p').text(`Nomor ${nomor} berhasil disalin!`);
+    $('#successModal').modal('show');
+    setTimeout(() => $('#successModal').modal('hide'), 3000);
+
+    const successSound = document.getElementById('success-sound');
+    if (successSound) {
+      successSound.volume = 1.0;
+      successSound.currentTime = 0;
+      successSound.play();
+    }
+  });
 });
                       
       $('#toggle-theme').click(function () {
