@@ -429,29 +429,14 @@ body.dark-mode .highlight-line {
       }
 
       $('#click-overlay').on('click', function () {
-  const elem = document.body;
-
-  // Minta fullscreen hanya saat user klik
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen().catch(err => {
-      console.warn("Gagal masuk fullscreen:", err);
-    });
-  }
-
-  requestWakeLock();
-
-  // Tampilkan loading screen selama 1 detik
-  $('#loading-screen').fadeIn();
-
-  setTimeout(() => {
-    $('#click-overlay').fadeOut();
-    $('#main-content').fadeIn();
-    $('#loading-screen').fadeOut();
-
-    // Simpan status ke localStorage agar tidak diulang setelah reload
-    localStorage.setItem('isStarted', 'true');
-  }, 1000);
-});
+        const elem = document.body;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        }
+        requestWakeLock();
+        $('#click-overlay').fadeOut();
+        $('#main-content').fadeIn();
+      });
 
       let wakeLock = null;
 
@@ -708,11 +693,6 @@ setInterval(applyAutoTheme, 5 * 60 * 1000);
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <div id="loading-screen" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-white" style="z-index: 99998; display: none;">
-  <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-  </div>
   
 </body>
 
