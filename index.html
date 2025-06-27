@@ -599,11 +599,15 @@ $(document).on('click', '.copy-btn', function () {
       $('#toggle-theme').click(function () {
   $('body').toggleClass('dark-mode');
 
-        const logo = $('#logo-img');
+  const logo = $('#logo-img');
+  const themeBtn = $(this);
+
   if ($('body').hasClass('dark-mode')) {
     logo.attr('src', 'assets/logo-dark.png');
+    themeBtn.removeClass('btn-light').addClass('btn-dark');
   } else {
     logo.attr('src', 'assets/logo.png');
+    themeBtn.removeClass('btn-dark').addClass('btn-light');
   }
 });
 
@@ -685,13 +689,16 @@ function applyAutoTheme() {
   const now = new Date();
   const hours = now.getHours();
   const logo = $('#logo-img');
+  const themeBtn = $('#toggle-theme');
 
   if (hours >= 17 || hours < 7) {
     $('body').addClass('dark-mode');
     logo.attr('src', 'assets/logo-dark.png');
+    themeBtn.removeClass('btn-light').addClass('btn-dark');
   } else {
     $('body').removeClass('dark-mode');
     logo.attr('src', 'assets/logo.png');
+    themeBtn.removeClass('btn-dark').addClass('btn-light');
   }
 }
 
