@@ -200,6 +200,27 @@ body.dark-mode .modal-content.modal-animate {
 body.dark-mode .modal-caption {
   color: #cccccc;
 }
+
+    .modal.fade .modal-dialog {
+  transform: translateY(30px);
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+}
+
+.modal.show .modal-dialog {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+    body.dark-mode .btn-outline-light {
+  border-color: #ccc;
+  color: #eee;
+}
+
+body.dark-mode .btn-outline-light:hover {
+  background-color: #eee;
+  color: #222;
+}
     
     #warningModal,
     #existsModal,
@@ -478,8 +499,8 @@ body.dark-mode .highlight-line {
       </div>
       <div class="modal-body text-center">
         <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 80px;">
-        <p class="fw-semibold text-warning-emphasis">Nomor ini sudah ada dalam riwayat Anda.</p>
-        <p class="modal-caption">Anda dapat melihat dan menyalin ulang dari daftar riwayat.</p>
+        <p class="fw-semibold text-warning-emphasis">Nomor ini sudah ada dalam riwayat.</p>
+        <p class="modal-caption">Anda dapat melihat dan memilih dari daftar riwayat.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Kembali</button>
