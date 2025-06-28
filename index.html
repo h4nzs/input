@@ -545,7 +545,7 @@ document.addEventListener('visibilitychange', () => {
 
         const saved = saveToHistory(nomor);
         if (saved) {
-          $('#simpanLanjutMModal').modal('show');
+          $('#simpanLanjutModal').modal('show');
           setTimeout(() => $('#simpanLanjutModal').modal('hide'), 10000);
           navigator.clipboard.writeText(nomor);
         } else {
