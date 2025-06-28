@@ -608,6 +608,15 @@ document.addEventListener('visibilitychange', () => {
         }
       });
 
+      $('#simpanLanjutModal').on('shown.bs.modal', function () {
+  const successSound = document.getElementById('success-sound');
+  if (successSound) {
+    successSound.volume = 1.0;
+    successSound.currentTime = 0;
+    successSound.play();
+  }
+});
+      
       let fullHistory = []; // Data asli
 let batchSize = 20; // Tampilkan 20 nomor per kali
 let currentIndex = 0;
