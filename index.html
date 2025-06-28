@@ -225,6 +225,10 @@ body.dark-mode .btn-outline-light:hover {
   background-color: #eee;
   color: #222;
 }
+
+    body.theme-transition * {
+  transition: background-color 0.4s ease, color 0.4s ease !important;
+    }
     
     #warningModal,
     #existsModal,
@@ -682,7 +686,12 @@ $(document).on('click', '.copy-btn', function () {
 });
                       
       $('#toggle-theme').click(function () {
-  $('body').toggleClass('dark-mode');
+        $('body').addClass('theme-transition');
+
+        setTimeout(() => {
+    $('body').toggleClass('dark-mode');
+    $('body').removeClass('theme-transition');
+  }, 50);
 
   const logo = $('#logo-img');
   const themeBtn = $(this);
