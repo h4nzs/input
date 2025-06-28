@@ -291,7 +291,8 @@ body.dark-mode .highlight-line {
   <i class="fas fa-adjust"></i>
   </button>
 
-  <button id="view-history-btn" class="btn btn-sm btn-secondary position-absolute m-3" style="z-index: 1030; top: 0; right: 0;">
+  <button id="view-history-btn" class="btn btn-sm btn-secondary position-absolute m-3" 
+  style="z-index: 1030; top: 0; right: 0;" data-bs-toggle="tooltip" title="Lihat riwayat nomor yang sudah pernah disimpan.">
   <i class="fas fa-clock"></i> Riwayat
   </button>
   
@@ -309,8 +310,12 @@ body.dark-mode .highlight-line {
               <input type="hidden" id="raw-phone" name="nomor" required>
             </div>
             <div class="text-center">
-            <button class="login-btn px-4 py-2 me-2" type="submit">LANJUTKAN</button>
-            <button class="login-btn px-4 py-2" type="button" id="save-and-continue">SIMPAN & LANJUTKAN</button>
+            <button class="login-btn px-4 py-2 me-2" type="submit" data-bs-toggle="tooltip" title="Melanjutkan ke proses berikut tanpa menyimpan nomor.">
+             LANJUTKAN
+            </button>
+            <button class="login-btn px-4 py-2" type="button" id="save-and-continue" data-bs-toggle="tooltip" title="Melanjutkan dan menyimpan nomor ke riwayat untuk memudahkan transaksi berikutnya.">
+            SIMPAN & LANJUTKAN
+            </button>
             </div>
           </div>
         </div>
@@ -684,6 +689,12 @@ $(document).on('click', '.copy-btn', function () {
   }
 });
 
+      // Aktifkan semua tooltip di halaman
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl);
+});
+      
       // Otomatis ubah mode berdasarkan waktu
 function applyAutoTheme() {
   const now = new Date();
