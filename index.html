@@ -166,6 +166,32 @@ body.dark-mode .modal-footer p {
   color: #ffffff;
 }
 
+    .modal-content.modal-animate {
+  animation: slideUp 0.3s ease-out;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #ffffff, #f4f4f4);
+}
+
+body.dark-mode .modal-content.modal-animate {
+  background: linear-gradient(135deg, #2c2c2c, #3a3a3a);
+  color: #ffffff;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header i {
+  font-size: 1.2rem;
+}
+    
     #warningModal,
     #existsModal,
   #successModal {
@@ -350,84 +376,108 @@ body.dark-mode .highlight-line {
 
   <!-- Modal -->
   <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content text-center">
-        <div class="modal-header">
-          <h5 class="modal-title">Nomor Berhasil Disimpan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <img src="assets/ceklis.png" alt="Ceklis" class="img-fluid mb-3" style="max-width: 100px;">
-          <p>Nomor berhasil disimpan!</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tutup</button>
-        </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center shadow modal-animate">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i>Nomor Telah Diproses</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="assets/ceklis.png" alt="Ceklis" class="img-fluid mb-3" style="max-width: 80px;">
+        <p class="fw-semibold">Nomor berhasil dilanjutkan!</p>
+        <p class="text-muted small">Anda bisa menyimpan nomor ini ke riwayat untuk memudahkan transaksi berikutnya dengan memilih simpan & lanjutkan.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Tutup</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Modal Peringatan -->
-<div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content text-center">
-      <div class="modal-header bg-warning-subtle">
-        <h5 class="modal-title text-danger">Nomor Belum Diisi</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+  <div class="modal fade" id="simpanLanjutModal" tabindex="-1" aria-labelledby="simpanLanjutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow modal-animate">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title"><i class="fas fa-save me-2"></i>Nomor Disimpan & Dilanjutkan</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
-      <div class="modal-body">
-        <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 100px;">
+      <div class="modal-body text-center">
+        <p class="fw-semibold">Nomor Anda berhasil disimpan ke riwayat dan dilanjutkan.</p>
+        <p class="text-muted small">Anda bisa membuka menu riwayat dan memilih nomor anda tanpa harus mengetik.</p>
       </div>
       <div class="modal-footer">
-        <p class="w-100 text-center text-secondary mb-0">Mohon isikan nomor tujuan Anda terlebih dahulu</p>
+        <button class="btn btn-outline-light" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  <!-- Modal Peringatan -->
+<div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow modal-animate">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Nomor Belum Diisi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 80px;">
+        <p class="fw-semibold">Anda belum memasukkan nomor tujuan.</p>
+        <p class="text-muted small">Silakan masukkan nomor sebelum melanjutkan.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Mengerti</button>
       </div>
     </div>
   </div>
 </div>
 
   <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content text-center">
-      <div class="modal-header">
-        <h5 class="modal-title">Riwayat Nomor</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content shadow modal-animate">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-clock me-2"></i>Riwayat Nomor</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-center">
         <div id="history-loading" class="text-center my-3 d-none">
-  <div class="spinner-border text-secondary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-  <p class="mt-2">Memuat riwayat...</p>
+          <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Memuat riwayat...</p>
         </div>
-        <ul id="history-list" class="list-group">
-        </ul>
+        <ul id="history-list" class="list-group mb-3"></ul>
         <button id="load-more-btn" class="btn btn-outline-primary w-100 d-none">Muat Lebih Banyak</button>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        <button class="btn btn-danger btn-sm" onclick="localStorage.removeItem('nomorRiwayat'); location.reload();">Hapus Riwayat</button>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+        <button class="btn btn-danger btn-sm" onclick="localStorage.removeItem('nomorRiwayat'); location.reload();">
+          <i class="fas fa-trash-alt me-1"></i> Hapus Riwayat
+        </button>
       </div>
     </div>
   </div>
-  </div>
+</div>
+
 
   <div class="modal fade" id="existsModal" tabindex="-1" aria-labelledby="existsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content text-center">
-        <div class="modal-header bg-warning-subtle">
-          <h5 class="modal-title text-danger">Nomor Sudah Tersimpan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-        </div>
-        <div class="modal-body">
-          <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 100px;">
-          <p class="text-secondary">Nomor tersebut sudah ada di riwayat.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow modal-animate">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i>Nomor Sudah Tersimpan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 80px;">
+        <p class="fw-semibold text-warning-emphasis">Nomor ini sudah ada dalam riwayat Anda.</p>
+        <p class="text-muted small">Anda dapat melihat dan menyalin ulang dari daftar riwayat.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Kembali</button>
       </div>
     </div>
   </div>
+</div>
   
   <!-- Scripts -->
   <script>
@@ -495,10 +545,8 @@ document.addEventListener('visibilitychange', () => {
 
         const saved = saveToHistory(nomor);
         if (saved) {
-          $('#successModal .modal-title').text('Nomor Berhasil Disimpan');
-          $('#successModal .modal-body p').text('Nomor berhasil disimpan!');
-          $('#successModal').modal('show');
-          setTimeout(() => $('#successModal').modal('hide'), 10000);
+          $('#simpanLanjutMModal').modal('show');
+          setTimeout(() => $('#simpanLanjutModal').modal('hide'), 10000);
           navigator.clipboard.writeText(nomor);
         } else {
           $('#existsModal').modal('show');
@@ -581,9 +629,7 @@ $(document).on('click', '.copy-btn', function () {
     $icon.attr('class', 'fas fa-check');
     
 
-    // Tampilkan modal sukses
-    $('#successModal .modal-title').text('Nomor Disalin');
-    $('#successModal .modal-body p').text(`Nomor ${nomor} berhasil disalin!`);
+    // Tampilkan modal sukses 
     $('#successModal').modal('show');
     setTimeout(() => $('#successModal').modal('hide'), 3000);
 
