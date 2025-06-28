@@ -188,6 +188,10 @@ body.dark-mode .modal-content.modal-animate {
   }
 }
 
+    body, .modal-content, .login-row-area, .calculator, .btn, input, .list-group-item {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+    
 .modal-header i {
   font-size: 1.2rem;
 }
@@ -686,6 +690,10 @@ $(document).on('click', '.copy-btn', function () {
   if ($('body').hasClass('dark-mode')) {
     logo.attr('src', 'assets/logo-dark.png');
     themeBtn.removeClass('btn-light').addClass('btn-dark');
+    setTimeout(() => {
+    logo.attr('src', 'assets/logo-dark.png');
+    }, 150); // Delay 150ms biar lebih halus
+    
   } else {
     logo.attr('src', 'assets/logo.png');
     themeBtn.removeClass('btn-dark').addClass('btn-light');
