@@ -229,7 +229,10 @@ body.dark-mode .btn-outline-light:hover {
     body.theme-transition * {
   transition: background-color 0.4s ease, color 0.4s ease !important;
     }
-    
+
+    body {
+  will-change: background-color, color;
+    }
     #warningModal,
     #existsModal,
   #successModal {
@@ -686,27 +689,22 @@ $(document).on('click', '.copy-btn', function () {
 });
                       
       $('#toggle-theme').click(function () {
-        $('body').addClass('theme-transition');
-
-        setTimeout(() => {
-    $('body').toggleClass('dark-mode');
-    $('body').removeClass('theme-transition');
-  }, 50);
-
   const logo = $('#logo-img');
   const themeBtn = $(this);
 
-  if ($('body').hasClass('dark-mode')) {
-    logo.attr('src', 'assets/logo-dark.png');
-    themeBtn.removeClass('btn-light').addClass('btn-dark');
-    setTimeout(() => {
-    logo.attr('src', 'assets/logo-dark.png');
-    }, 150); // Delay 150ms biar lebih halus
+  $('body').addClass('theme-transition');
+
+  setTimeout(() => {
+    $('body').toggleClass('dark-mode');
     
-  } else {
-    logo.attr('src', 'assets/logo.png');
-    themeBtn.removeClass('btn-dark').addClass('btn-light');
-  }
+    const isDark = $('body').hasClass('dark-mode');
+
+    // Logo dan tombol diperbarui SETELAH mode diubah
+    logo.attr('src', isDark ? 'assets/logo-dark.png' : 'assets/logo.png');
+    themeBtn.toggleClass('btn-dark', isDark).toggleClass('btn-light', !isDark);
+
+    $('body').removeClass('theme-transition');
+  }, 50);
 });
 
       $('.button[data-number]').click(function () {
