@@ -191,6 +191,15 @@ body.dark-mode .modal-content.modal-animate {
 .modal-header i {
   font-size: 1.2rem;
 }
+
+    .modal-caption {
+  font-size: 0.875rem;
+  color: #6c757d; /* Bootstrap muted */
+}
+
+body.dark-mode .modal-caption {
+  color: #cccccc;
+}
     
     #warningModal,
     #existsModal,
@@ -385,7 +394,7 @@ body.dark-mode .highlight-line {
       <div class="modal-body">
         <img src="assets/ceklis.png" alt="Ceklis" class="img-fluid mb-3" style="max-width: 80px;">
         <p class="fw-semibold">Nomor berhasil dilanjutkan!</p>
-        <p class="text-muted small">Anda bisa menyimpan nomor ini ke riwayat untuk memudahkan transaksi berikutnya dengan memilih simpan & lanjutkan.</p>
+        <p class="modal-caption">Anda bisa menyimpan nomor ini ke riwayat untuk memudahkan transaksi berikutnya dengan memilih simpan & lanjutkan.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Tutup</button>
@@ -403,7 +412,7 @@ body.dark-mode .highlight-line {
       </div>
       <div class="modal-body text-center">
         <p class="fw-semibold">Nomor Anda berhasil disimpan ke riwayat dan dilanjutkan.</p>
-        <p class="text-muted small">Anda bisa membuka menu riwayat dan memilih nomor anda tanpa harus mengetik.</p>
+        <p class="modal-caption">Anda bisa membuka menu riwayat dan memilih nomor anda tanpa harus mengetik.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-light" data-bs-dismiss="modal">Tutup</button>
@@ -423,7 +432,7 @@ body.dark-mode .highlight-line {
       <div class="modal-body text-center">
         <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 80px;">
         <p class="fw-semibold">Anda belum memasukkan nomor tujuan.</p>
-        <p class="text-muted small">Silakan masukkan nomor sebelum melanjutkan.</p>
+        <p class="modal-caption">Silakan masukkan nomor sebelum melanjutkan.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Mengerti</button>
@@ -470,7 +479,7 @@ body.dark-mode .highlight-line {
       <div class="modal-body text-center">
         <img src="assets/warn.png" alt="Peringatan" class="img-fluid mb-3" style="max-width: 80px;">
         <p class="fw-semibold text-warning-emphasis">Nomor ini sudah ada dalam riwayat Anda.</p>
-        <p class="text-muted small">Anda dapat melihat dan menyalin ulang dari daftar riwayat.</p>
+        <p class="modal-caption">Anda dapat melihat dan menyalin ulang dari daftar riwayat.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Kembali</button>
