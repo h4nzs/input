@@ -470,17 +470,6 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-    // Tampilkan modal sukses 
-    $('#successModal').modal('show');
-    setTimeout(() => $('#successModal').modal('hide'), 3000);
-
-    const successSound = document.getElementById('success-sound');
-    if (successSound) {
-      successSound.volume = 1.0;
-      successSound.currentTime = 0;
-      successSound.play();
-    }
-                  
       $('#toggle-theme').click(function () {
   const logo = $('#logo-img');
   const themeBtn = $(this);
